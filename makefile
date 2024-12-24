@@ -1,0 +1,26 @@
+INCLUDE_DIRECTORY=include
+
+MATH_DIRECTORY=../math.c
+MATH_INCLUDE_DIRECTORY=$(MATH_DIRECTORY)/include
+MATH_OBJECTS_DIRECTORY=$(MATH_DIRECTORY)/objects
+
+CC=gcc
+C_FLAGS=-O3 -I$(INCLUDE_DIRECTORY) -I$(MATH_INCLUDE_DIRECTORY)
+
+OBJECTS_DIR=objects
+SOURCE_DIR=sources
+
+SOURCE_FILES:=$(wildcard $(SOURCE_DIR)/*.c)
+OBJECT_FILES:=$(patsubst $(SOURCE_DIR)/%.c, $(OBJECTS_DIR)/%.o, $(SOURCE_FILES))
+
+OUT_FILE=sine-generator
+
+$(OUT_FILE): $(OBJECT_FILES)
+	$(CC) $(C_FLAGS) $(MATH_OBJECTS_DIRECTORY)/math.o $^ -o $@
+
+$(OBJECTS_DIR)/%.o: $(SOURCE_DIR)/%.c
+	$(CC) $(C_FLAGS) -c $< -o $@
+
+clean:
+	-rm $(OUT_FILE) $(OBJECTS_DIR)/*.o
+
